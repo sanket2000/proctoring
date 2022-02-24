@@ -1,9 +1,16 @@
 import sounddevice as sd
 import numpy as np
-
-def print_sound(indata, outdata, frames, time, status):
+count = 0
+def print_sound(indata, frames, time, status):
+    global count
+    count += 1
+    # print("frame: ",frames)
+    # print("time: ",time)
+    # print("status: ",status)
     volume_norm = np.linalg.norm(indata)*10
-    print ("|" * int(volume_norm))
+    print(int(volume_norm),"|" * int(volume_norm))
 
-with sd.Stream(callback=print_sound):
-        sd.sleep(40000)
+with sd.InputStream(callback=print_sound):
+    sd.sleep(-1)
+
+# print(count)
