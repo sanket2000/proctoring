@@ -3,6 +3,7 @@ import numpy as np
 
 # place holders and global variables
 SOUND_AMPLITUDE = 0
+AUDIO_CHEAT = 0
 
 # sound variables
 # SUS means next sound packet is worth analyzing
@@ -18,7 +19,7 @@ count = 0
 
 def print_sound(indata, outdata, frames, time, status):
     avg_amp = 0
-    global SOUND_AMPLITUDE, SUS_COUNT, count, SOUND_AMPLITUDE_THRESHOLD
+    global SOUND_AMPLITUDE, SUS_COUNT, count, SOUND_AMPLITUDE_THRESHOLD, AUDIO_CHEAT
     vnorm = int(np.linalg.norm(indata)*10)
     AMPLITUDE_LIST.append(vnorm)
     count += 1
@@ -28,16 +29,18 @@ def print_sound(indata, outdata, frames, time, status):
         SOUND_AMPLITUDE = avg_amp
         if SUS_COUNT >= 2:
             print("!!!!!!!!!!!! FBI OPEN UP !!!!!!!!!!!!")
+            AUDIO_CHEAT = 1
             SUS_COUNT = 0
         if avg_amp > SOUND_AMPLITUDE_THRESHOLD:
             SUS_COUNT += 1
             print("Sus...", SUS_COUNT)
         else:
             SUS_COUNT = 0
+            AUDIO_CHEAT = 0
         count = 0
 
 def sound():
-    with sd.InputStream(callback=print_sound):
+    with sd.Stream(callback=print_sound):
         sd.sleep(-1)
 
 def sound_analysis():

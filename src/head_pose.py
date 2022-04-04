@@ -6,13 +6,17 @@ import mediapipe as mp
 import numpy as np
 import threading as th
 import sounddevice as sd
+import audio
 
 # place holders and global variables
 x = 0                                       # X axis head pose
 y = 0                                       # Y axis head pose
 
+X_AXIS_CHEAT = 0
+Y_AXIS_CHEAT = 0
+
 def pose():
-    global VOLUME_NORM, x, y
+    global VOLUME_NORM, x, y, X_AXIS_CHEAT, Y_AXIS_CHEAT
     #############################
     mp_face_mesh = mp.solutions.face_mesh
     face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
@@ -108,8 +112,21 @@ def pose():
                     text = "Forward"
                 text = str(int(x)) + "::" + str(int(y)) + text
                 # print(str(int(x)) + "::" + str(int(y)))
-                print("x: {x}   |   y: {y}  |   sound amplitude: {amp}".format(x=int(x), y=int(y), amp=VOLUME_NORM))
+                # print("x: {x}   |   y: {y}  |   sound amplitude: {amp}".format(x=int(x), y=int(y), amp=audio.SOUND_AMPLITUDE))
+                
+                # Y is left / right
+                # X is up / down
+                if y < -10 or y > 10:
+                    X_AXIS_CHEAT = 1
+                else:
+                    X_AXIS_CHEAT = 0
 
+                if x < -5:
+                    Y_AXIS_CHEAT = 1
+                else:
+                    Y_AXIS_CHEAT = 0
+
+                # print(X_AXIS_CHEAT, Y_AXIS_CHEAT)
                 # Display the nose direction
                 nose_3d_projection, jacobian = cv2.projectPoints(nose_3d, rot_vec, trans_vec, cam_matrix, dist_matrix)
 
@@ -132,14 +149,14 @@ def pose():
 if __name__ == "__main__":
     # main()
     t1 = th.Thread(target=pose)
-    t2 = th.Thread(target=sound)
+    # t2 = th.Thread(target=audio.sound)
     # t3 = th.Thread(target=sound_analysis)
 
     t1.start()
-    t2.start()
+    # t2.start()
     # t3.start()
 
     t1.join()
-    t2.join()
+    # t2.join()
     # t3.join()
 
