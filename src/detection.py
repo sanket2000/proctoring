@@ -11,6 +11,8 @@ ypoints = [0]*L
 GLOBAL_CHEAT = 0
 PERCENTAGE_CHEAT = 0
 CHEAT_THRESH = 0.5
+XDATA = []
+YDATA = []
 
 def avg(current, previous):
     if previous > 1:
@@ -18,7 +20,7 @@ def avg(current, previous):
     if current == 0:
         if previous < 0.01:
             return 0.01
-        return previous / 2
+        return previous / 1.5
     if previous == 0:
         return current
     return previous + 0.1 * current
@@ -87,6 +89,21 @@ def process():
     # plt.show()
 
 def run_detection():
+    global XDATA,YDATA
+    plt.show()
+    axes = plt.gca()
+    axes.set_xlim(0, 200)
+    axes.set_ylim(0,1)
+    line, = axes.plot(XDATA, YDATA, 'r-')
+    i = 0
     while True:
+        if i < 200:
+            XDATA.append(i)
+            YDATA.append(PERCENTAGE_CHEAT)
+            line.set_xdata(XDATA)
+            line.set_ydata(YDATA)
+            plt.draw()
+            plt.pause(1e-17)
         time.sleep(1/5)
         process()
+        i = i + 1
