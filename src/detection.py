@@ -12,8 +12,16 @@ GLOBAL_CHEAT = 0
 PERCENTAGE_CHEAT = 0
 CHEAT_THRESH = 0.5
 
-def avg(a, b):
-    return a + b*0.5
+def avg(current, previous):
+    if previous > 1:
+        return 0.5
+    if current == 0:
+        if previous < 0.01:
+            return 0.01
+        return previous / 2
+    if previous == 0:
+        return current
+    return previous + 0.1 * current
 
 def process():
     global GLOBAL_CHEAT, PERCENTAGE_CHEAT, CHEAT_THRESH #head_pose.X_AXIS_CHEAT, head_pose.Y_AXIS_CHEAT, audio.AUDIO_CHEAT, xpoints, ypoints
@@ -68,6 +76,7 @@ def process():
 
     if PERCENTAGE_CHEAT > CHEAT_THRESH:
         GLOBAL_CHEAT = 1
+        print("CHEATING")
     else:
         GLOBAL_CHEAT = 0
     print("Cheat percent: ", PERCENTAGE_CHEAT, GLOBAL_CHEAT)
