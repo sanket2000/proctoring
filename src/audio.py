@@ -27,7 +27,7 @@ def print_sound(indata, outdata, frames, time, status):
     if count == FRAMES_COUNT:
         avg_amp = sum(AMPLITUDE_LIST)/FRAMES_COUNT
         SOUND_AMPLITUDE = avg_amp
-        if SUS_COUNT >= 1:
+        if SUS_COUNT >= 2:
             #print("!!!!!!!!!!!! FBI OPEN UP !!!!!!!!!!!!")
             AUDIO_CHEAT = 1
             SUS_COUNT = 0
