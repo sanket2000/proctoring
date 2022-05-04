@@ -6,7 +6,7 @@ import mediapipe as mp
 import numpy as np
 import threading as th
 import sounddevice as sd
-import audio
+import audio.audio as audio
 
 # place holders and global variables
 x = 0                                       # X axis head pose

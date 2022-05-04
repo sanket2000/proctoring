@@ -1,6 +1,6 @@
 import time
-import audio
-import head_pose
+import audio.audio as audio
+import vision.head_pose as head_pose
 import matplotlib.pyplot as plt
 import numpy as np
 L = 15

@@ -1,6 +1,6 @@
-import audio
-import head_pose
-import detection
+import audio.audio as audio
+import vision.head_pose as head_pose
+import brain.detection as detection
 import threading as th
 
 
