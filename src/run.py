@@ -6,14 +6,14 @@ import threading as th
 
 if __name__ == "__main__":
     # main()
-    t1 = th.Thread(target=head_pose.pose)
-    t2 = th.Thread(target=audio.sound)
-    t3 = th.Thread(target=detection.run_detection)
+    head_pose_thread = th.Thread(target=head_pose.pose)
+    audio_thread = th.Thread(target=audio.sound)
+    detection_thread = th.Thread(target=detection.run_detection)
 
-    t1.start()
-    t2.start()
-    t3.start()
-
-    t1.join()
-    t2.join()
-    t3.join()
+    head_pose_thread.start()
+    audio_thread.start()
+    detection_thread.start()
+    
+    head_pose_thread.join()
+    audio_thread.join()
+    detection_thread.join()
