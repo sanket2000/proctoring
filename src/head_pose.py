@@ -22,7 +22,7 @@ def pose():
     face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
     cap = cv2.VideoCapture(0)
     mp_drawing = mp.solutions.drawing_utils
-    mp_drawing_styles = mp.solutions
+    # mp_drawing_styles = mp.solutions
 
     while cap.isOpened():
         success, image = cap.read()
