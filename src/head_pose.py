@@ -132,8 +132,7 @@ def pose():
 
                 p1 = (int(nose_2d[0]), int(nose_2d[1]))
                 p2 = (int(nose_3d_projection[0][0][0]), int(nose_3d_projection[0][0][1]))
-                
-                cv2.line(image, p1, p2, (255, 0, 0), 2)
+                   
 
                 # Add the text on the image
                 cv2.putText(image, text, (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
