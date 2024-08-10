@@ -1,46 +1,42 @@
 import sounddevice as sd
 import numpy as np
 
-# Placeholders and global variables
+# place holders and global variables
 SOUND_AMPLITUDE = 0
 AUDIO_CHEAT = 0
 
-# Sound variables
-CALLBACKS_PER_SECOND = 38               # Callbacks per second (system dependent)
-SUS_FINDING_FREQUENCY = 2               # Calculates SUS *n* times every second
-SOUND_AMPLITUDE_THRESHOLD = 20          # Amplitude considered for SUS calc 
+# sound variables
+# SUS means next sound packet is worth analyzing
+CALLBACKS_PER_SECOND = 38               # callbacks per sec(system dependent)
+SUS_FINDING_FREQUENCY = 2               # calculates SUS *n* times every sec
+SOUND_AMPLITUDE_THRESHOLD = 20          # amplitude considered for SUS calc 
 
-# Packing *n* frames to calculate SUS
-FRAMES_COUNT = int(CALLBACKS_PER_SECOND / SUS_FINDING_FREQUENCY)
-AMPLITUDE_LIST = [0] * FRAMES_COUNT
+# packing *n* frames to calculate SUS
+FRAMES_COUNT = int(CALLBACKS_PER_SECOND/SUS_FINDING_FREQUENCY)
+AMPLITUDE_LIST = list([0]*FRAMES_COUNT)
 SUS_COUNT = 0
 count = 0
 
-def calculate_rms(indata):
-    """Calculate the Root Mean Square (RMS) value of the audio data."""
-    return np.sqrt(np.mean(indata**2)) * 1000  # Scaling factor for better readability
-
 def print_sound(indata, outdata, frames, time, status):
+    avg_amp = 0
     global SOUND_AMPLITUDE, SUS_COUNT, count, SOUND_AMPLITUDE_THRESHOLD, AUDIO_CHEAT
-    rms_amplitude = calculate_rms(indata)
-    AMPLITUDE_LIST.append(rms_amplitude)
+    vnorm = int(np.linalg.norm(indata)*10)
+    AMPLITUDE_LIST.append(vnorm)
     count += 1
     AMPLITUDE_LIST.pop(0)
-    
     if count == FRAMES_COUNT:
-        avg_amp = sum(AMPLITUDE_LIST) / FRAMES_COUNT
+        avg_amp = sum(AMPLITUDE_LIST)/FRAMES_COUNT
         SOUND_AMPLITUDE = avg_amp
-        
         if SUS_COUNT >= 2:
+            #print("!!!!!!!!!!!! FBI OPEN UP !!!!!!!!!!!!")
             AUDIO_CHEAT = 1
             SUS_COUNT = 0
-        
         if avg_amp > SOUND_AMPLITUDE_THRESHOLD:
             SUS_COUNT += 1
+            #print("Sus...", SUS_COUNT)
         else:
             SUS_COUNT = 0
             AUDIO_CHEAT = 0
-        
         count = 0
 
 def sound():
@@ -53,7 +49,7 @@ def sound_analysis():
         AMPLITUDE_LIST.append(SOUND_AMPLITUDE)
         AMPLITUDE_LIST.pop(0)
 
-        avg_amp = sum(AMPLITUDE_LIST) / FRAMES_COUNT
+        avg_amp = sum(AMPLITUDE_LIST)/FRAMES_COUNT
 
         if avg_amp > 10:
             print("Sus...")
